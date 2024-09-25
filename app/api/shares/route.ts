@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server';
 import Share from '@/models/Share'; // Make sure this path matches your project structure
-import { connect } from '@/lib/connect'; // Assuming the `connect` function is in `/lib/connect`
+import { connectDB } from '@/lib/connect'; // Assuming the `connect` function is in `/lib/connect`
 
 export async function POST(request: Request) {
   try {
     // Connect to the database
-    await connect();
+    await connectDB();
 
     // Parse the request body
     const body = await request.json();

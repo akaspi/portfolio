@@ -6,7 +6,7 @@ if (!MONGO_URI) {
   throw new Error('Missing MONGO_CONNECTION_STRING in .env file');
 }
 
-export const connect = async () => {
+export const connectDB = async () => {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('Successfully connected to MongoDB');
