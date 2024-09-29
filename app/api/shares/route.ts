@@ -1,38 +1,33 @@
+import axios from 'axios';
+import https from 'https';
+import { JSDOM } from 'jsdom';
 import { NextResponse } from 'next/server';
-import Share from '@/models/Share'; // Make sure this path matches your project structure
-import { connectDB } from '@/lib/connect'; // Assuming the `connect` function is in `/lib/connect`
 
-export async function POST(request: Request) {
+export async function GET() {
   try {
-    // Connect to the database
-    await connectDB();
-
-    // Parse the request body
-    const body = await request.json();
-    const { ticker, lastKnownValue, units } = body;
-
-    // Validate the required fields
-    if (!ticker || typeof lastKnownValue !== 'number' || typeof units !== 'number') {
-      return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
-    }
-
-    // Create a new Share instance
-    const newShare = new Share({
-      ticker,
-      lastKnownValue,
-      units
+    const agent = new https.Agent({
+      rejectUnauthorized: false, // Allows self-signed certificates
     });
 
-    // Save the Share to the database
-    await newShare.save();
+    const res = await axios.get('https://www.bizportal.co.il/tradedfund/quote/generalview/1159169', {
+      httpsAgent: agent, // `httpsAgent` is supported in axios
+    });
+
+    const html = res.data;
+    const dom = new JSDOM(html);
+    const document = dom.window.document;
+
+    const valueNode = document.querySelector('body > div.container.body-content.redesignedquote > section > article.top-area > div.data-row.mutual-funds.etf > span:nth-child(1)');
+    const value = valueNode?.textContent;
+    console.log('value', value);
 
     // Return a success message
-    return NextResponse.json({ message: 'Share saved successfully' }, { status: 201 });
+    return NextResponse.json({ message: value }, { status: 200 });
 
   } catch (error) {
-    console.error('Error saving Share:', error);
+    console.error('Error:', error);
 
     // Return a failure message
-    return NextResponse.json({ message: 'Error saving Share' }, { status: 500 });
+    return NextResponse.json({ message: 'Error Share' }, { status: 500 });
   }
 }
