@@ -8,8 +8,10 @@ interface Share extends Document {
 
 const ShareSchema: Schema = new Schema({
   ticker: { type: String, required: true },
-  lastKnownValue: { type: Number, required: true },
-  units: { type: Number, required: true }
+  name: { type: String, required: true },
+  lastKnownValue: { type: Number, default: 0 },
+  units: { type: Number, required: true },
+  targetAllocation: { type: Number, required: true },
 }, { collection: 'Shares'});
 
 const Share = mongoose.model<Share>('Share', ShareSchema);
