@@ -3,7 +3,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-interface PortfolioData {
+export interface EditShareModalData {
   ticker: string;
   name: string;
   value: number;
@@ -14,12 +14,19 @@ interface PortfolioData {
 interface EditShareModalProps {
   isOpen: boolean;
   onClose: () => void;
-  data: PortfolioData | null;
+  data: EditShareModalData | null;
   mode: 'edit' | 'add'; // New prop to determine the mode
+  handleSubmit: (data: EditShareModalData) => void; // New prop for submit handler
 }
 
-const EditShareModal: React.FC<EditShareModalProps> = ({ isOpen, onClose, data, mode }) => {
-  const [formData, setFormData] = useState<PortfolioData | null>(data);
+const EditShareModal: React.FC<EditShareModalProps> = ({
+  isOpen,
+  onClose,
+  data,
+  mode,
+  handleSubmit,
+}) => {
+  const [formData, setFormData] = useState<EditShareModalData | null>(data);
 
   // Update formData whenever the data prop changes
   useEffect(() => {
@@ -56,8 +63,9 @@ const EditShareModal: React.FC<EditShareModalProps> = ({ isOpen, onClose, data, 
   };
 
   const handleSave = () => {
-    // Implement save logic here (e.g., send the updated data to the backend)
-    console.log('Updated data:', formData);
+    if (formData) {
+      handleSubmit(formData); // Call the submit handler with formData
+    }
     onClose(); // Close the modal after saving
   };
 

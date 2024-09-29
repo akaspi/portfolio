@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import EditShareModal from './EditShareModal';
+import EditShareModal, { EditShareModalData } from './EditShareModal';
 import { PortfolioData } from './types'; // Import PortfolioData
 
 const Portfolio: React.FC = () => {
@@ -39,9 +39,14 @@ const Portfolio: React.FC = () => {
     setSelectedData(null);
   };
 
+  const handleSubmitModal = (data: EditShareModalData) => {
+    console.log('Editing share:', data);
+    closeModal();
+  }
+
   return (
     <>
-      <EditShareModal isOpen={isModalOpen} onClose={closeModal} data={selectedData} mode={modalMode} />
+      <EditShareModal isOpen={isModalOpen} onClose={closeModal} handleSubmit={handleSubmitModal} data={selectedData} mode={modalMode} />
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import EditShareModal from './EditShareModal';
+import EditShareModal, { EditShareModalData } from './EditShareModal';
 
 const AddShareButton: React.FC = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -17,6 +17,11 @@ const AddShareButton: React.FC = () => {
     setModalOpen(false);
   };
 
+  const handleSubmitModal = (data: EditShareModalData) => {
+    console.log('Adding share:', data);
+    handleCloseModal();
+  }
+
   return (
     <div>
       <button
@@ -29,6 +34,7 @@ const AddShareButton: React.FC = () => {
       <EditShareModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        handleSubmit={handleSubmitModal}
         data={null}
         mode={'add'}
       />
